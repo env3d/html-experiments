@@ -1,60 +1,60 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Prolog in Javascript</title>
+    <head>
+        <title>Prolog in Javascript</title>
 
-    <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+        <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
-    <script src="prolog.js" language="JavaScript"></script>
-    <script type="text/javascript">
-      
-      $(document).ready(function() {
-	  $('#queryButton').button();
-	  $('#queryButton').click(function(){
-	      //alert("Hello!");
-	      freeform();
-	  });
-	  
-      });
+        <script src="prolog.js" language="JavaScript"></script>
+        <script type="text/javascript">
+         
+         $(document).ready(function() {
+	     $('#queryButton').button();
+	     $('#queryButton').click(function(){
+	         //alert("Hello!");
+	         freeform();
+	     });
+	     
+         });
 
-    </script>
+        </script>
 
-  </head>
-  <body>
-    
-    <div id="divIntro" style="border:5px solid black;margin:10px;">
-      <p>Comp301 - The Digital Life</p>
-      <p>This is a very short tutorial on how prolog works.  Sophisticated computer matching algorithms very often are based 
-	on inference engines such as prolog.</p>
-      <p>
-	The prolog interpreter is from <a href="http://ioctl.org/logic/prolog-latest">http://ioctl.org/logic/prolog-latest</a><br/>
-	The prolog lessons: <a target="_blank" href="http://moodle.capilanou.ca/mod/page/view.php?id=66973&inpopup=1">Learn Prolog</a>
-      </p>
-    </div>
-    
-    <div id="divLeft" style="height:600px;width:550px;float:left;">
-      <div id="divQuery">
-	<form name="input">
-	  Query: <input id="query" type="text" name="query" value="" size="90" />	  
-	  <input id="queryButton" type="button" value="Run query" />
-	  <input id="showparse" type="checkbox" name="showparse" /> Show parse results
-	</form>
-      </div>
-      
-      <div id="divResults">	
-	<pre id="output"></pre>
-      </div>
-    </div>
-    
-    <div id="divRules">
-      Rules:<br/>
-      <form name="rules" action="javascript:return false;">
-	  <textarea id="rules" cols="50" rows="35" name="rules"></textarea>
-      </form>
+    </head>
+    <body>
+        
+        <div id="divIntro" style="border:5px solid black;margin:10px;">
+            <p>Comp301 - The Digital Life</p>
+            <p>This is a very short tutorial on how prolog works.  Sophisticated computer matching algorithms very often are based 
+	        on inference engines such as prolog.</p>
+            <p>
+	        The prolog interpreter is from <a href="http://ioctl.org/logic/prolog-latest">http://ioctl.org/logic/prolog-latest</a><br/>
+	        The prolog lessons: <a target="_blank" href="https://github.com/env3d/html-experiments/blob/master/html_prolog/README.md">Learn Prolog</a>
+            </p>
+        </div>
+        
+        <div id="divLeft" style="height:600px;width:550px;float:left;">
+            <div id="divQuery">
+	        <form name="input">
+	            Query: <input id="query" type="text" name="query" value="" size="90" />	  
+	            <input id="queryButton" type="button" value="Run query" />
+	            <input id="showparse" type="checkbox" name="showparse" /> Show parse results
+	        </form>
+            </div>
+            
+            <div id="divResults">	
+	        <pre id="output"></pre>
+            </div>
+        </div>
+        
+        <div id="divRules">
+            Rules:<br/>
+            <form name="rules" action="javascript:return false;">
+	        <textarea id="rules" cols="50" rows="35" name="rules"></textarea>
+            </form>
 
-      <textarea cols="0" rows="0" id="defaultRules" style="visibility:hidden;">
+            <textarea cols="0" rows="0" id="defaultRules" style="visibility:hidden;">
 gtr(X, Y) :- compare(X, Y, gt).
 eq(X, Y) :- compare(X, Y, eq).
 neq(X, Y) :- not(eq(X,Y)).
@@ -63,9 +63,9 @@ les(X, Y) :- compare(X, Y, lt).
 # Standard prolog not/1
 not(Term) :- call(Term), !, fail.
 not(Term).
-      </textarea>
+            </textarea>
 
-    </div>
-    
-  </body>
+        </div>
+        
+    </body>
 </html>
