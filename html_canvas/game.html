@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <style type="text/css">
+      * {
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+      }
+    </style>
+    <script type="text/javascript">
+      // create some global variables for use
+
+      var canvas, ctx, imageData;
+      var linenum = 0;      
+
+      function init() {
+	  canvas = document.getElementById("canvas");
+	  canvas.onclick = click;	  
+	  ctx = canvas.getContext("2d");
+	  ctx.fillStyle = "#000000";
+	  ctx.fillRect(0,0,canvas.width, canvas.height);
+	  imageData = ctx.createImageData(canvas.width,canvas.height);
+//	  draw();
+      }
+
+      function draw() {
+	  var width = canvas.width;
+	  var height = canvas.height;
+	  
+	  for (var i = 0; i < imageData.data.length; i++) {
+	      channel = i%4;
+	      switch (channel) {
+	      case 0:
+		  imageData.data[i] += 10;
+		  break;
+	      case 1:
+		  break;
+	      case 2:
+		  break;
+	      case 3:
+		  imageData.data[i] = 255;
+	      }
+	  }
+
+/*	  for (var i=linenum*height; i<width+linenum*height; i++) {
+	      imageData.data[i*4]+=50;
+	      imageData.data[i*4+1]+=0;
+	      imageData.data[i*4+2]+=0;
+	      imageData.data[i*4+3]=255;
+	  } */
+	  ctx.putImageData(imageData, 0,0);
+	  linenum++;
+	  linenum = linenum % width;	  
+      }
+      
+      function start() {
+	  init();
+	  setInterval(draw, 10);
+      }
+      
+      function click(e) {
+	  alert("Clicked at "+e.clientX+" "+e.clientY);
+      }
+      
+      
+    </script>
+  </head>
+  <body onload="start()">
+    <canvas id="canvas" width="800" height="600"></canvas>
+  </body>
+</html>
+

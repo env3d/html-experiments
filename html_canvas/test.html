@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      linenum = 0;
+      
+      function draw() {
+	  var canvas = document.getElementById("canvas");
+	  canvas.onclick = click;
+	  
+	  var ctx = canvas.getContext("2d");
+	  
+	  imageData = ctx.createImageData(300,300); 
+	  
+	  for (var i=linenum*300; i<300+linenum*300; i++) {
+	      imageData.data[i*4]=255;
+	      imageData.data[i*4+1]=0;
+	      imageData.data[i*4+2]=0;
+	      imageData.data[i*4+3]=255;
+	  }
+	  ctx.putImageData(imageData, 0,0);
+	  linenum++;					
+	  linenum = linenum % 300;
+	  
+      }
+      
+      function start() {
+	  setInterval(draw, 10);
+      }
+      
+      function click(e) {
+	  alert("Clicked at "+e.clientX+" "+e.clientY);
+      }
+      
+      
+    </script>
+  </head>
+  <body onload="start()">
+    <canvas id="canvas" width="300" height="300"></canvas>
+  </body>
+</html>
+

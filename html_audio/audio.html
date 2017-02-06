@@ -1,0 +1,43 @@
+<audio id="a1" 
+       src="song.ogg"
+       controls>
+</audio>
+<script type="text/javascript">
+var a1 = document.getElementById('a1'),
+    a2 = new Audio(),
+    buffers = [];
+
+function loadedMetadata() {
+  // Mute a1 audio.
+  a1.volume = 0;
+  // Setup a2 to be identical to a1, and play through there.
+  a2.mozSetup(a1.mozChannels, a1.mozSampleRate);
+}
+
+function audioAvailable(event) {
+  // Write the current framebuffer
+  var frameBuffer = event.frameBuffer; // frameBuffer is Float32Array
+  writeAudio(frameBuffer);
+}
+
+a1.addEventListener('MozAudioAvailable', audioAvailable, false);
+a1.addEventListener('loadedmetadata', loadedMetadata, false);
+
+function writeAudio(audioBuffer) {
+  // audioBuffer is Float32Array
+  buffers.push({buffer: audioBuffer, position: 0});
+
+  // If there's buffered data, write that
+  while(buffers.length > 0) {
+    var buffer = buffers[0].buffer;
+    var position = buffers[0].position;
+    var written = a2.mozWriteAudio(buffer.subarray(position));
+    // // If all data wasn't written, keep it in the buffers:
+    if(position + written < buffer.length) {
+      buffers[0].position = position + written;
+      break;
+    }
+    buffers.shift();
+  }
+}
+</script>

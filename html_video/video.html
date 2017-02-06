@@ -1,0 +1,29 @@
+<video src="" controls="controls" autoplay></video>
+
+
+<script type="text/javascript">
+    
+  var onFailSoHard = function(e) {
+      console.log('Reeeejected!', e);
+      alert('FAIL!');
+  };
+
+
+  navigator.webkitGetUserMedia('video', function(stream) {
+      alert('SUCCESS');
+      var video = document.querySelector('video');
+      //video.src = localMediaStream;
+      //      video.src = webkitURL.createObjectURL(stream);
+      video.src = window.webkitURL.createObjectURL(stream);
+  }, onFailSoHard); 
+
+/*
+
+  navigator.webkitGetUserMedia({video: true, audio: false}, function(localMediaStream) {
+      var video = document.querySelector('video');
+      video.src = window.webkitURL.createObjectURL(localMediaStream);
+  }, onFailSoHard);
+*/
+  
+
+</script>
