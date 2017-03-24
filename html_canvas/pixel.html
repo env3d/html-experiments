@@ -69,6 +69,8 @@
 	      green = pixelArray.data[i*4+1];
 	      blue = pixelArray.data[i*4+2];
 	      alpha = pixelArray.data[i*4+3];
+              x = parseInt(i % 500);
+              y = parseInt(i / 500);
 
 	      code = document.getElementById("code");
 	      eval(userCode);
