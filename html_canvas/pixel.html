@@ -1,103 +1,123 @@
 <html>
-  <head>
-    <title>HTML5 Image Processing Experiment</title>
-    <script language="Javascript" type="text/javascript" src="edit_area/edit_area_full.js"></script>
-    <script language="Javascript" type="text/javascript">
-      editAreaLoader.init({
-	  id: "code"// id of the textarea to transform
-	  ,start_highlight: true// if start with highlight
-	  ,allow_resize: "no"
-	  ,allow_toggle: false
-	  ,language: "en"
-	  ,syntax: "js"
-	  ,replace_tab_by_spaces: 4
-	  ,save_callback: "transform_callback"
-	  ,toolbar: "save"
-	  
-      });
+    <head>
+        <title>HTML5 Image Processing Experiment</title>
+        <script language="Javascript" type="text/javascript" src="edit_area/edit_area_full.js"></script>
+        <script language="Javascript" type="text/javascript">
+         editAreaLoader.init({
+	     id: "code"// id of the textarea to transform
+	     ,start_highlight: true// if start with highlight
+	     ,allow_resize: "no"
+	     ,allow_toggle: false
+	     ,language: "en"
+	     ,syntax: "js"
+	     ,replace_tab_by_spaces: 4
+	     ,save_callback: "transform_callback"
+	     ,toolbar: "save"
+	     
+         });
 
-      function transform_callback(id, content) {
-	  transform(content);
-      }
-    </script>
-    <script type="text/javascript">
-      // ctx is global
-      var ctx;
-      var pixelArray, pixelArray2;
+         function transform_callback(id, content) {
+	     transform(content);
+         }
 
-      // retrive the red value at a particular pixel location
-      function redAt(index) {
-	  return pixelArray2.data[index*4];
-      }
-      function greenAt(index) {
-	  return pixelArray2.data[index*4+1];
-      }
-      function blueAt(index) {
-	  return pixelArray2.data[index*4+2];
-      }
-      function alphaAt(index) {
-	  return pixelArray2.data[index*4+3];
-      }
-      
-      function loadimage() {	  
-	  canvas = document.getElementById("canvas");
-	  // ctx is global
-	  ctx = canvas.getContext("2d");
-	  
-	  var img = new Image();
-	  img.src = document.getElementById("imageURL").value;
-	  side = 0;
-	  if (img.width < img.height) {
-	      side = img.width;
-	  } else {
-	      side = img.height;
-	  }
-	  side = (side > 500) ? 500 : side;
+         window.addEventListener('load', function() {
+             var canvas = document.querySelector("canvas");
+             var ctx = canvas.getContext("2d");
 
-	  img.onload = function() {
-	      //ctx.drawImage(img, 0, 0,500,500);
-	      ctx.drawImage(img, 0, 0, side, side, 0, 0, 500,500);
-	  }
-      }
-      
-      function transform(userCode) {
-	  pixelArray = ctx.getImageData(0,0,500,500);
-	  pixelArray2 = ctx.getImageData(0,0,500,500);
- 
-	  for (var i = 0; i < 500*500; i++) {
-	      red = pixelArray.data[i*4];
-	      green = pixelArray.data[i*4+1];
-	      blue = pixelArray.data[i*4+2];
-	      alpha = pixelArray.data[i*4+3];
-              x = parseInt(i % 500);
-              y = parseInt(i / 500);
+             
+             canvas.addEventListener('mousemove', function(e) {
+                 var x = e.offsetX;
+                 var y = e.offsetY;
+                 //console.log(e);
+                 var i = y*500*4+x*4;
+                 var imageData = ctx.getImageData(0,0,500,500);
+                 
+                 document.getElementById("pixel").value = "rgb("+imageData.data[i]+", "+
+                                                          imageData.data[i+1]+", "+
+                                                          imageData.data[i+2]+")";
+             });
+         });
+        </script>
+        <script type="text/javascript">
+         // ctx is global
+         var ctx;
+         var pixelArray, pixelArray2;
 
-	      code = document.getElementById("code");
-	      eval(userCode);
+         // retrive the red value at a particular pixel location
+         function redAt(index) {
+	     return pixelArray2.data[index*4];
+         }
+         function greenAt(index) {
+	     return pixelArray2.data[index*4+1];
+         }
+         function blueAt(index) {
+	     return pixelArray2.data[index*4+2];
+         }
+         function alphaAt(index) {
+	     return pixelArray2.data[index*4+3];
+         }
+         
+         function loadimage() {	  
+	     canvas = document.getElementById("canvas");
+	     // ctx is global
+	     ctx = canvas.getContext("2d");
+	     
+	     var img = new Image();
+	     img.src = document.getElementById("imageURL").value;
+	     side = 0;
+	     if (img.width < img.height) {
+	         side = img.width;
+	     } else {
+	         side = img.height;
+	     }
+	     side = (side > 500) ? 500 : side;
 
-	      pixelArray.data[i*4] = red;
-	      pixelArray.data[i*4+1] = green;
-	      pixelArray.data[i*4+2] = blue;
-	      pixelArray.data[i*4+3] = alpha;
-	  }
+	     img.onload = function() {
+	         //ctx.drawImage(img, 0, 0,500,500);
+	         ctx.drawImage(img, 0, 0, side, side, 0, 0, 500,500);
+	     }
+         }
+         
+         function transform(userCode) {
+	     pixelArray = ctx.getImageData(0,0,500,500);
+	     pixelArray2 = ctx.getImageData(0,0,500,500);
+             
+	     for (var i = 0; i < 500*500; i++) {
+	         red = pixelArray.data[i*4];
+	         green = pixelArray.data[i*4+1];
+	         blue = pixelArray.data[i*4+2];
+	         alpha = pixelArray.data[i*4+3];
+                 x = parseInt(i % 500);
+                 y = parseInt(i / 500);
 
-	  ctx.putImageData(pixelArray, 0,0);
-	  
-      }      
-      
-    </script>
-  </head>
-  <body onload="loadimage()">
-    <div id="canvas_div" style="height:600px;width:550px;float:left;">
-    <input id="imageURL" type="text" size="30" value="test.jpg"/>
-    <input type="button" value="load image" onClick="loadimage()"/>
-    
-    <canvas id="canvas" width="500" height="500"></canvas>
-    </div>
-    <div>
-      <textarea id="code" style="height:500px; width:300px;">red = 0;</textarea>
-      <!-- <input type="button" value="transform" onClick="transform()"/> -->
-    </div>
-  </body>
+	         code = document.getElementById("code");
+	         eval(userCode);
+
+	         pixelArray.data[i*4] = red;
+	         pixelArray.data[i*4+1] = green;
+	         pixelArray.data[i*4+2] = blue;
+	         pixelArray.data[i*4+3] = alpha;
+	     }
+
+	     ctx.putImageData(pixelArray, 0,0);
+	     
+         }      
+         
+        </script>
+    </head>
+    <body onload="loadimage()">
+        <div id="canvas_div" style="height:600px;width:550px;float:left;">
+            <input id="imageURL" type="text" size="30" value="test.jpg"/>
+            <input type="button" value="load image" onClick="loadimage()"/>
+            
+            <canvas id="canvas" width="500" height="500"></canvas>
+            <input id="pixel" type="text">            
+        </div>
+
+        <div>
+            <textarea id="code" style="height:500px; width:300px;">red = 0;</textarea>
+            <!-- <input type="button" value="transform" onClick="transform()"/> -->
+        </div>
+    </body>
 </html>
 
