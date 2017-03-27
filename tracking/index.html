@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <script src="node_modules/tracking/build/tracking-min.js"></script>
+        <script src="node_modules/tracking/build/data/eye-min.js"></script>
+        <script src="node_modules/tracking/build/data/mouth-min.js"></script>
+        <script src="node_modules/tracking/build/data/face-min.js"></script>         
+        <script>
+         var rects = [];
+         for (var i=0; i<10; i++) {
+             rects.push(document.createElement('div'));
+         }
+         
+         window.addEventListener('load', function() {
+             //var elem = document.querySelector("img");
+             var elem = document.querySelector("#video");
+             var tracker = new tracking.ObjectTracker(['eye','face']);
+             tracker.on('track', function(event) {
+                 //console.log(event);
+                 rects.forEach(function(r) {
+                     delete r.style;
+                 });
+                 event.data.forEach(function(o,i) {
+                     var x = elem.offsetLeft + o.x;
+                     var y = elem.offsetTop + o.y;
+                     var rect = rects[i];
+                     rect.style['border-style'] = "solid";
+                     rect.style.top = y+"px";
+                     rect.style.left = x+"px";                     
+                     rect.style.width = o.width;
+                     rect.style.height = o.height;
+                     rect.style.position = 'absolute';
+                     document.body.appendChild(rect);
+                 });
+             });
+             //tracking.track(elem, tracker);
+             tracking.track(elem, tracker, {camera: true});
+         });
+        </script>
+    </head>
+    <body>
+        <!-- <img src="portman.jpg">-->
+        <video id="video" width="320" height="240" preload autoplay loop muted></video>
+    </body>
+</html>
