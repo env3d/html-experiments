@@ -7,89 +7,8 @@ Prolog (programming in logic) is one of the most widely used programming languag
 
 By following this introduction, you will learn how to use Prolog as a programming language to solve practical problems in computer science and artificial intelligence. You will also learn how the Prolog interpreter actually works (at a very high level!).  You will also see the connection between logical argument and Prolog, and how systems like this can be used to perform data analysis.
 
-## Getting Started
 
-In the introduction it has been said that Prolog is a declarative (or descriptive) language. Programming in Prolog means describing the world. Using such programs means asking Prolog questions about the previously described world. The simplest way of describing the world is by stating facts, like this one:
-
-```
-bigger(elephant, horse).
-```
-
-This states, quite intuitively, the fact that an elephant is bigger than a horse. (Whether the world described by a Prolog program has anything to do with our real world is, of course, entirely up to the programmer.) Let’s add a few more facts to our little program:
-
-```
-bigger(elephant, horse).
-bigger(horse, donkey).
-bigger(donkey, dog).
-bigger(donkey, monkey).
-```
-
-This is a syntactically correct program, and after having compiled it we can ask the Prolog system questions (or queries in proper Prolog-jargon) about it. Here’s an example:
-
-```
-Query: bigger(donkey, dog)
-Result: Yes
-```
-
-The query bigger(donkey, dog) (i.e. the question “Is a donkey bigger than a dog?”) succeeds, because the fact bigger(donkey, dog) has previously been communicated to the Prolog system. Now, is a monkey bigger than an elephant?
-
-```
-Query: bigger(monkey, elephant).
-Result: No
-```
-
-No, it’s not. We get exactly the answer we expected: the corresponding query, namely bigger(monkey, elephant) fails. But what happens when we ask the other way round?
-
-```
-Query: bigger(elephant, monkey).
-Result: No
-```
-
-According to this elephants are not bigger than monkeys. This is clearly wrong as far as our real world is concerned, but if you check our little program again, you will find that it says nothing about the relationship between elephants and monkeys. Still, we know that if elephants are bigger than horses, which in turn are bigger than donkeys, which in turn are bigger than monkeys, then elephants also have to be bigger than monkeys. In mathematical terms: the bigger-relation is transitive. But this has also not been defined in our program. The correct interpretation of the negative answer Prolog has given is the following: from the information communicated to the system it cannot be proved that an elephant is bigger than a monkey.
-
-If, however, we would like to get a positive reply for a query like bigger(elephant, monkey), we have to provide a more accurate description of the world. One way of doing this would be to add the remaining facts, like e.g. bigger(elephant, monkey), to our program. For our little example this would mean adding another 5 facts. Clearly too much work and probably not too clever anyway.
-
-The far better solution would be to define a new relation, which we will call is_bigger, as the transitive closure (don’t worry if you don’t know what that means) of bigger. Animal X is bigger than animal Y either if this has been stated as a fact or if there is an animal Z for which it has been stated as a fact that animal X is bigger than animal Z and it can be shown that animal Z is bigger than animal Y. In Prolog such statements are called rules and are implemented like this:
-
-```
-is_bigger(X, Y) :- bigger(X, Y).
-is_bigger(X, Y) :- bigger(X, Z), is_bigger(Z, Y).
-```
-
-In these rules :- means something like “if” and the comma between the two terms bigger(X, Z) and is_bigger(Z, Y) stands for “and”. X, Y, and Z are variables, which in Prolog is indicated by using capital letters.
-
-You can think of the the bigger-facts as data someone has collected by browsing through the local zoo and comparing pairs of animals. The implementation of is_bigger, on the other hand, could have been provided by a knowledge engineer who may not know anything at all about animals, but understands the general concept of something being bigger than something else and thereby has the ability to formulate general rules regarding this relation. If from now on we use is_bigger instead of bigger in our queries, the program will work as intended:
-
-```
-Query: is_bigger(elephant, monkey)
-Result: Yes
-```
-
-Prolog still cannot find the fact bigger(elephant, monkey) in its database, so it tries to use the second rule instead. This is done by matching the query with the head of the rule, which is is_bigger(X, Y). When doing so the two variables get instantiated: X = elephant and Y = monkey. The rule says that in order to prove the goal is_bigger(X, Y) (with the variable instantiations that’s equivalent to is_bigger(elephant, monkey)) Prolog has to prove the two subgoals bigger(X, Z) and is_bigger(Z, Y), again with the same variable instantiations. This process is repeated recursively until the facts that make up the chain between elephant and monkey are found and the query finally succeeds.
-
-Of course, we can do slightly more exiting stuff than just asking yes/no-questions. Suppose we want to know, what animals are bigger than a donkey? The corresponding query would be:
-
-```
-Query: is_bigger(X, donkey)
-```
-
-Again, X is a variable. We could also have chosen any other name for it as long as it
-starts with a capital letter.  What results do you see?
-
-Horses are bigger than donkeys. The query has succeeded, but in order to allow it to succeed Prolog had to replace the variable X (a placeholder) with the value horse. Is horse the only answer?  What do you think Prolog is doing?
-
-There are many more ways of querying the Prolog system about the contents of its database. As a final example we ask whether there is an animal X that is both smaller than a donkey and bigger than a monkey:
-
-```
-Query: is_bigger(donkey, X), is_bigger(X, monkey).
-Result: No
-```
-
-The (correct) answer is No. Even though the two single queries is_bigger(donkey, X) and is_bigger(X, monkey) would both succeed when submitted on their own, their conjunction (represented by the comma) does not.
-
-*Exercise:* Could you come up with a query that reports all animals between the size of an elephant and dog?
-
-# Prolog Terminologies
+## Prolog Terminologies
 
 For the purpose of our short Prolog discussion, we only need to know a few terminologies. 
 
@@ -101,6 +20,8 @@ man(adam).
 
 States the fact that adam is a man.  The world adam is called an atom in Prolog.  Atoms are basically names that represents an entity and must starts with a lower case letter.  Each fact ends with a period (.) in Prolog.
 
+Another way to think about this is that *adam* is a thing in our prolog universe, and *man* is a label or classification for adam.
+
 Question: Is the following a valid Prolog fact?
 
 ```
@@ -111,7 +32,7 @@ man(eve).
 
 ```
 is_smaller(X, Y) :- is_bigger(Y, X).
-aunt(Aunt, Child) :- sister(Aunt, Parent), parent(Parent, Child).
+aunt(X, Z) :- sister(X, Y), parent(Y, Z).
 ```
 
 The intuitive meaning of a rule is that the goal expressed by its head is true, if we (or rather the Prolog system) can show that all of the expressions (subgoals) in the rule’s body are true.
@@ -159,6 +80,98 @@ Prolog agrees with our own logical reasoning. Which is nice. But how did it come
 4. The newly instantiated body becomes our new goal: man(socrates).
 5. Prolog executes the new goal by again trying to match it with a rule-head or a fact. Obviously, the goal man(socrates) matches the fact man(socrates), because they are identical. This means the current goal succeeds.
 6. This, again, means that also the initial goal succeeds.
+
+
+## A more involved example
+
+In the introduction it has been said that Prolog is a declarative (or descriptive) language. Programming in Prolog means describing the world. Using such programs means asking Prolog questions about the previously described world. The simplest way of describing the world is by stating facts, like this one:
+
+```
+bigger(elephant, horse).
+```
+
+This states, quite intuitively, the fact that an elephant is bigger than a horse. (Whether the world described by a Prolog program has anything to do with our real world is, of course, entirely up to the programmer.) Let’s add a few more facts to our little program:
+
+```
+bigger(elephant, horse).
+bigger(horse, donkey).
+bigger(donkey, dog).
+bigger(donkey, monkey).
+```
+
+This is a syntactically correct program, and after having compiled it we can ask the Prolog system questions (or queries in proper Prolog-jargon) about it. Here’s an example:
+
+```
+Query: bigger(donkey, dog)
+Result: Yes
+```
+
+The query bigger(donkey, dog) (i.e. the question “Is a donkey bigger than a dog?”) succeeds, because the fact bigger(donkey, dog) has previously been communicated to the Prolog system. Now, is a monkey bigger than an elephant?
+
+```
+Query: bigger(monkey, elephant).
+Result: No
+```
+
+No, it’s not. We get exactly the answer we expected: the corresponding query, namely bigger(monkey, elephant) fails. But what happens when we ask the other way round?
+
+```
+Query: bigger(elephant, monkey).
+Result: No
+```
+
+According to this elephants are not bigger than monkeys. This is clearly wrong as far as our real world is concerned, but if you check our little program again, you will find that it says nothing about the relationship between elephants and monkeys. Still, we know that if elephants are bigger than horses, which in turn are bigger than donkeys, which in turn are bigger than monkeys, then elephants also have to be bigger than monkeys. In mathematical terms: the bigger-relation is transitive. But this has also not been defined in our program. The correct interpretation of the negative answer Prolog has given is the following: from the information communicated to the system it cannot be proved that an elephant is bigger than a monkey.
+
+If, however, we would like to get a positive reply for a query like bigger(elephant, monkey), we have to provide a more accurate description of the world. One way of doing this would be to add the remaining facts, like e.g. bigger(elephant, monkey), to our program. For our little example this would mean adding another 5 facts. Clearly too much work and probably not too clever anyway.
+
+The far better solution would be to define a new relation, which we will call much_bigger:
+
+```
+much_bigger(X, Y) :- bigger(X, Z), bigger(Z, Y).
+```
+
+In this rule, :- means something like “if” and the comma between the two terms bigger(X, Z) and is_bigger(Z, Y) stands for “and”. X, Y, and Z are variables, which in Prolog is indicated by using capital letters.
+
+
+The much_bigger relation is cool, but it only works for relationship that is one step removed.  A more general way of solving the problem is to create a the transitive closure (don’t worry if you don’t know what that means) of bigger. Animal X is bigger than animal Y either if this has been stated as a fact or if there is an animal Z for which it has been stated as a fact that animal X is bigger than animal Z and it can be shown that animal Z is bigger than animal Y. In Prolog such statements are called rules and are implemented like this:
+
+```
+is_bigger(X, Y) :- bigger(X, Y).
+is_bigger(X, Y) :- bigger(X, Z), is_bigger(Z, Y).
+```
+
+Now we can use is_bigger to query any kind of bigger relationships.
+
+You can think of the the bigger-facts as data someone has collected by browsing through the local zoo and comparing pairs of animals. The implementation of is_bigger, on the other hand, could have been provided by a knowledge engineer who may not know anything at all about animals, but understands the general concept of something being bigger than something else and thereby has the ability to formulate general rules regarding this relation. If from now on we use is_bigger instead of bigger in our queries, the program will work as intended:
+
+```
+Query: is_bigger(elephant, monkey)
+Result: Yes
+```
+
+Prolog still cannot find the fact bigger(elephant, monkey) in its database, so it tries to use the second rule instead. This is done by matching the query with the head of the rule, which is is_bigger(X, Y). When doing so the two variables get instantiated: X = elephant and Y = monkey. The rule says that in order to prove the goal is_bigger(X, Y) (with the variable instantiations that’s equivalent to is_bigger(elephant, monkey)) Prolog has to prove the two subgoals bigger(X, Z) and is_bigger(Z, Y), again with the same variable instantiations. This process is repeated recursively until the facts that make up the chain between elephant and monkey are found and the query finally succeeds.
+
+Of course, we can do slightly more exiting stuff than just asking yes/no-questions. Suppose we want to know, what animals are bigger than a donkey? The corresponding query would be:
+
+```
+Query: is_bigger(X, donkey)
+```
+
+Again, X is a variable. We could also have chosen any other name for it as long as it
+starts with a capital letter.  What results do you see?
+
+Horses are bigger than donkeys. The query has succeeded, but in order to allow it to succeed Prolog had to replace the variable X (a placeholder) with the value horse. Is horse the only answer?  What do you think Prolog is doing?
+
+There are many more ways of querying the Prolog system about the contents of its database. As a final example we ask whether there is an animal X that is both smaller than a donkey and bigger than a monkey:
+
+```
+Query: is_bigger(donkey, X), is_bigger(X, monkey).
+Result: No
+```
+
+The (correct) answer is No. Even though the two single queries is_bigger(donkey, X) and is_bigger(X, monkey) would both succeed when submitted on their own, their conjunction (represented by the comma) does not.
+
+*Challenge:* Could you come up with a query that reports all animals between the size of an elephant and dog?
 
 ## Exercise 1
 
