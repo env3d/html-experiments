@@ -13,7 +13,8 @@
          window.addEventListener('load', function() {
              //var elem = document.querySelector("img");
              var elem = document.querySelector("#video");
-             var tracker = new tracking.ObjectTracker(['eye','face']);
+	     // can add additional detection features: i.e. ['eye', 'face']
+             var tracker = new tracking.ObjectTracker(['face']);
              tracker.on('track', function(event) {
                  //console.log(event);
                  rects.forEach(function(r) {
