@@ -10,7 +10,7 @@ function print (str) {
     $('#output').append(str);
 }
 
-function freeform() {
+function freeform(str) {
     cls();
 
 /*    var tmp = $('#defaultRules').val();
@@ -18,7 +18,7 @@ function freeform() {
     var show = document.input.showparse.checked;
     var query = document.input.query.value; */
 
-    var rules = $('#rules').val()+"\n"+$('#defaultRules').val();
+    var rules = str+"\n"+$('#defaultRules').val();
     var show = $('#showparse:checked').val();
     var query =$('#query').val();
 
