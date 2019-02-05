@@ -160,7 +160,136 @@ Prolog agrees with our own logical reasoning. Which is nice. But how did it come
 5. Prolog executes the new goal by again trying to match it with a rule-head or a fact. Obviously, the goal man(socrates) matches the fact man(socrates), because they are identical. This means the current goal succeeds.
 6. This, again, means that also the initial goal succeeds.
 
-## Exercise
+## Exercise 1
+
+The following rules are generated from imdb
+
+```
+actor(amy).
+actor(benedict).
+actor(chris).
+actor(jenna).
+actor(john).
+actor(keira).
+actor(robert).
+actor(scarlett).
+actor(steve).
+movie(a_quiet_place).
+movie(atonement).
+movie(august__osage_county).
+movie(baby_mama).
+movie(christopher_robin).
+movie(dangerous_matrimony).
+movie(doctor_strange).
+movie(end_of_the_road).
+movie(foxcatcher).
+movie(guardians_of_the_galaxy).
+movie(her).
+movie(inside_out).
+movie(iron_man).
+movie(iron_man_3).
+movie(it_s_complicated).
+movie(jurassic_world).
+movie(levelland).
+movie(little_miss_sunshine).
+movie(lost_in_translation).
+movie(motorcycle).
+movie(peter_and_john).
+movie(pirates_of_the_caribbean__the_curse_of_the_black_pearl).
+movie(pride___prejudice).
+movie(sherlock_holmes).
+movie(slither).
+movie(something_borrowed).
+movie(star_trek_into_darkness).
+movie(the_40_year_old_virgin).
+movie(the_avengers).
+movie(the_detective).
+movie(the_giant_mechanical_man).
+movie(the_imitation_game).
+movie(the_lego_movie).
+movie(under_the_skin).
+movie(walk_hard__the_dewey_cox_story).
+short(cocktail_muerte).
+short(grand_union_canal).
+short(the_corpse_wore_white).
+short(the_shallows).
+starred(amy,baby_mama).
+starred(amy,inside_out).
+starred(amy,parks_and_recreation).
+starred(amy,saturday_night_live).
+starred(benedict,august__osage_county).
+starred(benedict,doctor_strange).
+starred(benedict,star_trek_into_darkness).
+starred(benedict,the_imitation_game).
+starred(chris,auto).
+starred(chris,christopher_robin).
+starred(chris,cocktail_muerte).
+starred(chris,dangerous_matrimony).
+starred(chris,end_of_the_road).
+starred(chris,grand_union_canal).
+starred(chris,guardians_of_the_galaxy).
+starred(chris,joy_and_the_apocalypse).
+starred(chris,jurassic_world).
+starred(chris,levelland).
+starred(chris,linda_calise__suit___tie_feat._frankie_rossi).
+starred(chris,maternal_instinct).
+starred(chris,modern_marvels).
+starred(chris,motorcycle).
+starred(chris,parks_and_recreation).
+starred(chris,peter_and_john).
+starred(chris,the_casting_call).
+starred(chris,the_corpse_wore_white).
+starred(chris,the_detective).
+starred(chris,the_lego_movie).
+starred(chris,the_shallows).
+starred(jenna,slither).
+starred(jenna,snugglepuff).
+starred(jenna,the_giant_mechanical_man).
+starred(jenna,the_office).
+starred(jenna,walk_hard__the_dewey_cox_story).
+starred(john,a_quiet_place).
+starred(john,it_s_complicated).
+starred(john,something_borrowed).
+starred(john,the_office).
+starred(keira,atonement).
+starred(keira,pirates_of_the_caribbean__the_curse_of_the_black_pearl).
+starred(keira,pride___prejudice).
+starred(keira,the_imitation_game).
+starred(robert,iron_man).
+starred(robert,iron_man_3).
+starred(robert,sherlock_holmes).
+starred(robert,the_avengers).
+starred(scarlett,her).
+starred(scarlett,lost_in_translation).
+starred(scarlett,the_avengers).
+starred(scarlett,under_the_skin).
+starred(steve,foxcatcher).
+starred(steve,little_miss_sunshine).
+starred(steve,the_40_year_old_virgin).
+starred(steve,the_office).
+tvmovie(joy_and_the_apocalypse).
+tvmovie(maternal_instinct).
+tvseries(modern_marvels).
+tvseries(parks_and_recreation).
+tvseries(saturday_night_live).
+tvseries(the_casting_call).
+tvseries(the_office).
+video(auto).
+video(linda_calise__suit___tie_feat._frankie_rossi).
+video(snugglepuff).
+```
+
+Create the following queries:
+
+ 1. Find out if the_casting_call is a movie
+ 1. Find out who starred in the_casting_call
+ 1. Find all actors
+ 1. Find all actors that have starred in the_office
+ 1. Find all movies that steve had starred in
+ 1. Find all movie actors (alternatively find all tv actors, etc.)
+ 1. Find all actors that have worked on a show with chris
+
+## Exercise 2
 
 Draw the family tree corresponding to the following Prolog program:
 
@@ -200,3 +329,4 @@ Example: X is the brother of Y, if they have a parent Z in common and if X is ma
 ```
 brother(X, Y) :- parent(Z, X), parent(Z, Y), male(X), neq(X,Y).
 ```
+
