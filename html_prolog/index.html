@@ -154,10 +154,11 @@ woman(theodora).`);
 	  });
 
 	  document.getElementById('example2').addEventListener('click', evt => {
-	    editor.setValue(`bigger(elephant, horse).
-bigger(horse, donkey).
-bigger(donkey, dog).
-bigger(donkey, monkey).`);
+	    editor.setValue(`small(dog).
+small(monkey).
+medium(horse).
+large(elephant).
+bigger(X, Y) :- medium(X), small(Y).`);
 	  });
 
 	  document.getElementById('exercise1').addEventListener('click', evt => {
