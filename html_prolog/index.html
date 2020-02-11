@@ -84,6 +84,8 @@
           </div>
 
 	  <div>
+	    <button id="example1">load example 1 data</button>
+	    <button id="example2">load example 2 data</button>
 	    <button id="exercise1">load exercise 1 data</button>
 	    <button id="exercise2">load exercise 2 data</button>
 	  </div>
@@ -127,6 +129,37 @@
 
 
 	<script>
+	  document.getElementById('example1').addEventListener('click', evt => {
+	    editor.setValue(`mortal(X) :- man(X).
+man(socrates).
+man(plato).
+man(parmenides).
+man(anaxagoras).
+man(anaximander).
+man(empedocles).
+man(zeno).
+man(pythagoras).
+man(aristotle).
+
+woman(maitreyi).
+woman(gargi_vachaknavi).
+woman(theano_of_croton).
+woman(aristoclea_of_delphi).
+woman(aspasia_of_Miletus).
+woman(arete_of_cyrene).
+woman(sosipatra_of_ephesus).
+woman(hypatia).
+woman(aedesia_of_alexandria).
+woman(theodora).`);
+	  });
+
+	  document.getElementById('example2').addEventListener('click', evt => {
+	    editor.setValue(`bigger(elephant, horse).
+bigger(horse, donkey).
+bigger(donkey, dog).
+bigger(donkey, monkey).`);
+	  });
+
 	  document.getElementById('exercise1').addEventListener('click', evt => {
 	      editor.setValue(`actor(amy).
 actor(benedict).
