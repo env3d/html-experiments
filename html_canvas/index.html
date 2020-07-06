@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <title>HTML5 Image Processing Experiment</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css">
+    <style>
+      section {
+	  display: flex;
+      }
+      body {
+	  margin: 0;
+      }
+      main {
+	  display: grid;
+	  grid-template-areas: 'run pixel'
+			       'code image'
+      }
+      #run { grid-area: 'run' }
+      #pixel { grid-area: 'load' }
+      #code { grid-area: 'code' }
+      #image { grid-area: 'image' }
+      #image, #code {
+	  width: 500px;
+	  height: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <section>
+      <input id="imageURL" type="text" size="30" value="test.jpg"/>    
+      <button id="load">Load Image</button>      
+    </section>
+    
+    <main>
+      <button id="run">Run</button>
+      <input id="pixel" type="text">      
+      <div id="code">red = 0;</div>
+      <canvas id="image" width="500" height="500" ></canvas>
+    </main>
+
+    
+    <script language="Javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/test/ace.js"></script>
+    <script language="Javascript" src="index.js"></script>
+    <script language="Javascript" type="text/javascript">
+
+      var editor = ace.edit('code');
+      editor.setTheme("ace/theme/monokai");
+      editor.session.setMode("ace/mode/javascript");
+
+      document.getElementById('run').addEventListener('click', () => transform(editor.getValue()));
+      document.getElementById('load').addEventListener('click', () => loadimage());
+
+      window.addEventListener('load', function() {
+        var canvas = document.querySelector("#image");
+        var ctx = canvas.getContext("2d");
+        
+        canvas.addEventListener('mousemove', function(e) {
+          var x = e.offsetX;
+          var y = e.offsetY;
+          //console.log(e);
+          var i = y*500*4+x*4;
+          var imageData = ctx.getImageData(0,0,500,500);
+          
+          document.getElementById("pixel").value = "rgb("+imageData.data[i]+", "+
+            imageData.data[i+1]+", "+
+            imageData.data[i+2]+")";
+        });
+      });
+    </script>
+
+    
+  </body>
+</html>
+
