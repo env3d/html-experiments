@@ -21,12 +21,31 @@ function alphaAt(x,y) {
 	return pixelArray2.data[index*4+3];
 }
 
+// Allow setting of arbitary pixel data
+function setRedAt(x,y,val) {
+  index = y * 500 + x;
+	pixelArray.data[index*4] = val;
+}
+function setGreenAt(x,y,val) {
+  index = y * 500 + x;  
+  pixelArray.data[index*4+1] = val;
+}
+function setBlueAt(x,y,val) {
+  index = y * 500 + x;  
+	pixelArray.data[index*4+2] = val;
+}
+function setAlphaAt(x,y,val) {
+  index = y * 500 + x;  
+	pixelArray.data[index*4+3] = val;
+}
+
 function loadimage() {	  
 	canvas = document.getElementById("image");
 	// ctx is global
 	ctx = canvas.getContext("2d");
 	
 	var img = new Image();
+  img.crossOrigin = "Anonymous";
 	img.src = document.getElementById("imageURL").value;
   
 	side = 0;
@@ -38,11 +57,15 @@ function loadimage() {
 	side = (side > 500) ? 500 : side;
 
 	img.onload = function() {
+    
     //console.log('image loaded');
-	  ctx.drawImage(img, 0, 0,500,500);
+    
+	  ctx.drawImage(img, 0, 0, 500, 500);      
+    /*
     setTimeout( () => {
       ctx.drawImage(img, 0, 0, side, side, 0, 0, 500,500);
     }, 500);
+    */
 	};
 }
 

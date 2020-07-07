@@ -1,8 +1,13 @@
 <html>
   <head>
     <title>HTML5 Image Processing Experiment</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css" />
+    <!-- <link rel="stylesheet" href="https://watercss.netlify.app/dist/dark.css" /> -->
     <style>
+      select {
+	  -webkit-appearance: auto;
+      }
+      
       form, section {
 	  display: flex;
       }
@@ -27,18 +32,16 @@
   <body>
     
     <section>
-      <input id="imageURL" type="text" size="30" value="test.jpg"/>    
+      <input id="imageURL" type="text" size="30" value="corg2.jpg"/>    
       <button id="load">Load Image</button>      
     </section>
-
-    <form>
-      <select name="examples" id="examples">
-      </select>
-    </form>
     
     <main>
-      <button id="run">Run</button>
-      <input id="pixel" type="text">      
+      <div style='display: flex'>
+	<select name="examples" id="examples"></select>
+	<button id="run">Run</button>
+      </div>
+      <input id="pixel" type"text">      
       <div id="code"></div>
       <canvas id="image" width="500" height="500" ></canvas>
     </main>
@@ -49,7 +52,7 @@
     <script language="Javascript" type="text/javascript">
 
       loadimage();
-      
+
       var editor = ace.edit('code');
       
       editor.setTheme("ace/theme/monokai");
@@ -69,7 +72,7 @@
         var imageData = ctx.getImageData(0,0,500,500);
         
         document.getElementById("pixel").value =
-	  [`Coordinate (x, y): (${x}, ${y}), `,
+	  [`Coordinate (x: ${x}, y: ${y}): `,
 	   `red: ${imageData.data[i]}, `,
            `green: ${imageData.data[i+1]}, `,
            `blue: ${imageData.data[i+2]}`].join('');
@@ -77,32 +80,51 @@
 
       examples = {
 
-	'click here to select some basic examples': [
+	'click here to explore some basic examples': [
+	  '// When you hover your mouse over the image',
+	  '// to the right, you can see the rgb value',
+	  '// for each of the pixels.',
+	  '',
+	  '// NOTE: the image is 500x500 pixels', 
+	  '',
 	  '// Code written here will be run on ',
-	  '// every pixel of the loaded image',
+	  '// every pixel of the loaded image.',
 	  '',
 	  '// You can use the following variables:',
 	  '//   x, y, red, green, and blue',
 	  '',
 	  '// For example, the following code will ',
 	  '// remove the red channel from all the',
-	  '// pixels of the image',
+	  '// pixels of the image.',
 	  '',
 	  'red = 0;'].join('\n'),	
 	
 	'brightness': [
+	  '// Brightness can be thought of as',
+	  '// adding value to each of the color',
+	  '// chanel, as shown below',
+	  '',
 	  'red = red + 50;',
 	  'green = green + 50;',
 	  'blue = blue + 50;',	  
 	].join('\n'),
 
 	'contrast': [
-	  'red = red * 1.2;',
-	  'green = green * 1.2;',
-	  'blue = blue * 1.2;',	  
+	  '// simple contrast can be increased',
+	  '// by increasing the gap between',
+	  '// color brightness using mulitplication',
+	  '',
+	  'red = red * 1.5;',
+	  'green = green * 1.5;',
+	  'blue = blue * 1.5;',	  
 	].join('\n'),
 	
 	'grayscale': [
+	  '// to turn all pixels into grayscale',
+	  '// we assign all 3 channels to have',
+	  '// the same brigtness value based',
+	  '// on the average of the channels',
+	  '',
 	  'average = (red + green + blue) / 3;',
 	  'red = average;',
 	  'green = average;',
@@ -110,6 +132,7 @@
 	].join('\n'),
 
 	'flip-x': [
+	  '// here we perform a simple mirror image',
 	  'red = redAt(500-x, y);',
 	  'green = greenAt(500-x, y);',
 	  'blue = blueAt(500-x, y);'	  
