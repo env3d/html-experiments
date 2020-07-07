@@ -4,16 +4,20 @@ var ctx;
 var pixelArray, pixelArray2;
 
 // retrive the red value at a particular pixel location
-function redAt(index) {
+function redAt(x,y) {
+  index = y * 500 + x;
 	return pixelArray2.data[index*4];
 }
-function greenAt(index) {
+function greenAt(x,y) {
+  index = y * 500 + x;  
 	return pixelArray2.data[index*4+1];
 }
-function blueAt(index) {
+function blueAt(x,y) {
+  index = y * 500 + x;  
 	return pixelArray2.data[index*4+2];
 }
-function alphaAt(index) {
+function alphaAt(x,y) {
+  index = y * 500 + x;  
 	return pixelArray2.data[index*4+3];
 }
 

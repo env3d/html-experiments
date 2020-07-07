@@ -3,7 +3,7 @@
     <title>HTML5 Image Processing Experiment</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css">
     <style>
-      section {
+      form, section {
 	  display: flex;
       }
       body {
@@ -30,11 +30,16 @@
       <input id="imageURL" type="text" size="30" value="test.jpg"/>    
       <button id="load">Load Image</button>      
     </section>
+
+    <form>
+      <select name="examples" id="examples">
+      </select>
+    </form>
     
     <main>
       <button id="run">Run</button>
       <input id="pixel" type="text">      
-      <div id="code">red = 0;</div>
+      <div id="code"></div>
       <canvas id="image" width="500" height="500" ></canvas>
     </main>
 
@@ -43,29 +48,92 @@
     <script language="Javascript" src="index.js"></script>
     <script language="Javascript" type="text/javascript">
 
+      loadimage();
+      
       var editor = ace.edit('code');
+      
       editor.setTheme("ace/theme/monokai");
       editor.session.setMode("ace/mode/javascript");
 
       document.getElementById('run').addEventListener('click', () => transform(editor.getValue()));
       document.getElementById('load').addEventListener('click', () => loadimage());
 
-      window.addEventListener('load', function() {
-        var canvas = document.querySelector("#image");
-        var ctx = canvas.getContext("2d");
+      var canvas = document.querySelector("#image");
+      var ctx = canvas.getContext("2d");
+      
+      canvas.addEventListener('mousemove', function(e) {
+        var x = e.offsetX;
+        var y = e.offsetY;
+        //console.log(e);
+        var i = y*500*4+x*4;
+        var imageData = ctx.getImageData(0,0,500,500);
         
-        canvas.addEventListener('mousemove', function(e) {
-          var x = e.offsetX;
-          var y = e.offsetY;
-          //console.log(e);
-          var i = y*500*4+x*4;
-          var imageData = ctx.getImageData(0,0,500,500);
-          
-          document.getElementById("pixel").value = "rgb("+imageData.data[i]+", "+
-            imageData.data[i+1]+", "+
-            imageData.data[i+2]+")";
-        });
+        document.getElementById("pixel").value =
+	  [`Coordinate (x, y): (${x}, ${y}), `,
+	   `red: ${imageData.data[i]}, `,
+           `green: ${imageData.data[i+1]}, `,
+           `blue: ${imageData.data[i+2]}`].join('');
       });
+
+      examples = {
+
+	'click here to select some basic examples': [
+	  '// Code written here will be run on ',
+	  '// every pixel of the loaded image',
+	  '',
+	  '// You can use the following variables:',
+	  '//   x, y, red, green, and blue',
+	  '',
+	  '// For example, the following code will ',
+	  '// remove the red channel from all the',
+	  '// pixels of the image',
+	  '',
+	  'red = 0;'].join('\n'),	
+	
+	'brightness': [
+	  'red = red + 50;',
+	  'green = green + 50;',
+	  'blue = blue + 50;',	  
+	].join('\n'),
+
+	'contrast': [
+	  'red = red * 1.2;',
+	  'green = green * 1.2;',
+	  'blue = blue * 1.2;',	  
+	].join('\n'),
+	
+	'grayscale': [
+	  'average = (red + green + blue) / 3;',
+	  'red = average;',
+	  'green = average;',
+	  'blue = average;'
+	].join('\n'),
+
+	'flip-x': [
+	  'red = redAt(500-x, y);',
+	  'green = greenAt(500-x, y);',
+	  'blue = blueAt(500-x, y);'	  
+	].join('\n'),
+	
+      }
+
+      var examplesElement = document.getElementById('examples');
+      Object.keys(examples).forEach( k => {
+	var opt = document.createElement('option');
+	opt.value = k;
+	opt.innerHTML = k;
+	examplesElement.add(opt);
+      });
+
+      examplesElement.addEventListener( 'change', (o) => {
+	console.log(o.target.value);
+	editor.setValue(examples[o.target.value]);
+	editor.clearSelection();	
+      });
+
+      editor.setValue(examples[Object.keys(examples)[0]]);
+      editor.clearSelection();	      
+      
     </script>
 
     
