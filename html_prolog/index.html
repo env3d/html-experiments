@@ -148,7 +148,7 @@ friend(jason, ann).
 friend(joseph, sally).
 friend(joseph, mary).
 friend(sally, liz).
-friend(joe, mary).`)
+friend(joe, mary).`, -1)
 	  });
 	  
 	  document.getElementById('example1').addEventListener('click', evt => {
@@ -172,7 +172,7 @@ woman(arete_of_cyrene).
 woman(sosipatra_of_ephesus).
 woman(hypatia).
 woman(aedesia_of_alexandria).
-woman(theodora).`);
+woman(theodora).`, -1);
 	  });
 
 	  document.getElementById('example2').addEventListener('click', evt => {
@@ -180,7 +180,7 @@ woman(theodora).`);
 small(monkey).
 medium(horse).
 large(elephant).
-bigger(X, Y) :- medium(X), small(Y).`);
+bigger(X, Y) :- medium(X), small(Y).`, -1);
 	  });
 
 	  document.getElementById('exercise1').addEventListener('click', evt => {
@@ -295,8 +295,7 @@ tvseries(the_casting_call).
 tvseries(the_office).
 video(auto).
 video(linda_calise__suit___tie_feat._frankie_rossi).
-video(snugglepuff).
-`)
+video(snugglepuff).`, -1)
 	      editor.clearSelection();
 	  });
 	  
@@ -319,7 +318,7 @@ parent(juliet, mary).
 parent(peter, harry).
 parent(lisa, harry).
 parent(mary, dick).
-parent(mary, sandra).`)
+parent(mary, sandra).`, -1)
 	      editor.clearSelection();
 	  });
 	</script>
