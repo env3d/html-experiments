@@ -52,10 +52,12 @@ friend(joe, mary).
 The query `man(joseph).` would result in true, since `man(joseph)` exists in our list of facts.
 The query `man(X).` would result in
 
-```X = alex
+```
+X = alex
 X = joe
 X = jason
-X = joseph```
+X = joseph
+```
 
 The above is an example of using a prolog *variabe*, you can think of a variable as a wildcard that matches anything.
 Any uppercase letter inside a query would classify as a variable.  
