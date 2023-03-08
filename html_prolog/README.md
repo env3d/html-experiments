@@ -8,7 +8,7 @@ Prolog (programming in logic) is one of the most widely used programming languag
 By following this introduction, you will learn how to use Prolog as a programming language to solve practical problems in computer science and artificial intelligence. You will also learn how the Prolog interpreter actually works (at a very high level!).  You will also see the connection between logical argument and Prolog, and how systems like this can be used to perform data analysis.
 
 
-## Prolog Terminologies
+## Prolog Basics
 
 For the purpose of our short Prolog discussion, we only need to know a few terminologies. 
 
@@ -27,89 +27,49 @@ Question: Is the following a valid Prolog fact?
 ```
 man(eve).
 ```
-
-*Rules* - A rule consists of a head (a predicate) and a body. (a sequence of predicates separated by commas). Head and body are separated by the sign :- and, like every Prolog expression, a rule has to be terminated by a dot. Examples:
-
-```
-is_smaller(X, Y) :- is_bigger(Y, X).
-aunt(X, Z) :- sister(X, Y), parent(Y, Z).
-```
-
-The intuitive meaning of a rule is that the goal expressed by its head is true, if we (or rather the Prolog system) can show that all of the expressions (subgoals) in the rule’s body are true.
-
-*Query* - After entering all valid facts and rules, a Prolog program is run by submitting queries in the query textbox. A query has the same structure as the body of a rule, i.e. it is a sequence of predicates separated by commas and (optionally) terminated by a dot.  Examples:
+*Query* - After entering all valid facts, a Prolog program is run by submitting queries in the query textbox. A query has the same structure as fact. Let's start with the following set of facts, describing the relationships between people::
 
 ```
-Query: is_bigger(elephant, donkey).
-Query: small(X), green(X), slimy(X).
+man(alex).
+man(joe).
+man(jason).
+man(joseph).
+woman(sally).
+woman(liz).
+woman(ann).
+woman(mary).
+moron(alex).
+moron(sally).
+friend(jason, joseph).
+friend(jason, alex).
+friend(jason, ann).
+friend(joseph, sally).
+friend(joseph, mary).
+friend(sally, liz).
+friend(joe, mary).
 ```
 
-Intuitively, when submitting a query like the last example, we ask Prolog whether all its predicates are provably true, or in other words whether there is an X such that small(X), green(X), and slimy(X) are all true.
+The query `man(joseph).` would result in true, since `man(joseph)` exists in our list of facts.
+The query `man(X).` would result in
 
-*Variables* - You have seen these already, they are the X, Y, Parent, etc. in the previous examples.  Think of variables as placeholders when defining your rules and queries.  Variables are what make the Prolog system "intelligent".  Think of variables as the placeholders that we used in the general form of a logical argument.
+```X = alex
+X = joe
+X = jason
+X = joseph```
 
-# Answering Queries
+The above is an example of using a prolog *variabe*, you can think of a variable as a wildcard that matches anything.
+Any uppercase letter inside a query would classify as a variable.  
 
-We shall exemplify the process of the Prolog query engine by means of the following famous argument:
+Create queries for the following:
 
-```
-Premise 1: All men are mortal.
-Premise 2: Socrates is a man.
-Conculsion: Socrates is mortal.
-```
+ 1. Check if jason is a man
+ 1. Check if liz is a man
+ 1. Check if jason and liz are friends
+ 1. Retrieve all women
+ 1. Retrieve all of joseph's friends
+ 1. Retrieve all of jason's frields who is also a moron
 
-In Prolog terms, the first statement represents a rule: X is mortal, if X is a man (for all X). The second one constitutes a fact: Socrates is a man. This can be implemented in Prolog as follows:
-
-```
-mortal(X) :- man(X).
-man(socrates).
-```
-
-Note that X is a variable, whereas socrates is an atom. The conclusion of the argument, “Socrates is mortal”, can be expressed through the query mortal(socrates). After having entered the above rules and facts, we can submit this query to Prolog, which will cause the following reaction:
-
-```
-Query: mortal(socrates).
-Yes
-```
-
-Prolog agrees with our own logical reasoning. Which is nice. But how did it come to its conclusion? Let’s follow the goal execution step by step.
-
-1. The query mortal(socrates) is made the initial goal.
-2. Scanning through the clauses of our program, Prolog tries to match mortal(socrates) with the first possible fact or head of rule. It finds mortal(X), the head of the first (and only) rule. When matching the two terms the instantia- tion X = socrates needs to be made.
-3. The variable instantiation is extended to the body of the rule, i.e. man(X) becomes man(socrates).
-4. The newly instantiated body becomes our new goal: man(socrates).
-5. Prolog executes the new goal by again trying to match it with a rule-head or a fact. Obviously, the goal man(socrates) matches the fact man(socrates), because they are identical. This means the current goal succeeds.
-6. This, again, means that also the initial goal succeeds.
-
-
-## A more involved example
-
-In the introduction it has been said that Prolog is a declarative (or descriptive) language. Programming in Prolog means describing the world. Using such programs means asking Prolog questions about the previously described world. The simplest way of describing the world is by stating facts, like this one:
-
-```
-small(dog).
-small(monkey).
-medium(horse).
-large(elephant).
-```
-
-This states, quite intuitively, that our world divides animals into 3 different sizes: small, medium, and large.
-
-However, these facts are just symbols to prolog, and have no human meanings associated with it.  To create some meaning, we can write the following rule:
-
-```
-bigger(X, Y) :- medium(X), small(Y).
-```
-
-The above rule suggest that a for X to be bigger than Y, X has to be a medium animal and Y has to be a small animal.
-
-Try to come up with the following:
-
- 1. Using the above rule only, write a query that finds all animals bigger than a dog
- 1. Come up with a set of rules that captures the relationships between all sizes of animals
-
-
-## Exercise 1
+### Exercise 1
 
 The following rules are generated from imdb
 
@@ -238,7 +198,91 @@ Create the following queries:
  1. Find all movie actors (alternatively find all tv actors, etc.)
  1. Find all actors that have worked on a show with chris
 
-## Exercise 2
+
+## Prolog Rules
+
+*Rules* - A rule consists of a head (a predicate) and a body. (a sequence of predicates separated by commas). Head and body are separated by the sign :- and, like every Prolog expression, a rule has to be terminated by a dot. Examples:
+
+```
+is_smaller(X, Y) :- is_bigger(Y, X).
+aunt(X, Z) :- sister(X, Y), parent(Y, Z).
+```
+
+The intuitive meaning of a rule is that the goal expressed by its head is true, if we (or rather the Prolog system) can show that all of the expressions (subgoals) in the rule’s body are true.
+
+*Query* - After entering all valid facts and rules, a Prolog program is run by submitting queries in the query textbox. A query has the same structure as the body of a rule, i.e. it is a sequence of predicates separated by commas and (optionally) terminated by a dot.  Examples:
+
+```
+Query: is_bigger(elephant, donkey).
+Query: small(X), green(X), slimy(X).
+```
+
+Intuitively, when submitting a query like the last example, we ask Prolog whether all its predicates are provably true, or in other words whether there is an X such that small(X), green(X), and slimy(X) are all true.
+
+*Variables* - You have seen these already, they are the X, Y, Parent, etc. in the previous examples.  Think of variables as placeholders when defining your rules and queries.  Variables are what make the Prolog system "intelligent".  Think of variables as the placeholders that we used in the general form of a logical argument.
+
+# Answering Queries
+
+We shall exemplify the process of the Prolog query engine by means of the following famous argument:
+
+```
+Premise 1: All men are mortal.
+Premise 2: Socrates is a man.
+Conculsion: Socrates is mortal.
+```
+
+In Prolog terms, the first statement represents a rule: X is mortal, if X is a man (for all X). The second one constitutes a fact: Socrates is a man. This can be implemented in Prolog as follows:
+
+```
+mortal(X) :- man(X).
+man(socrates).
+```
+
+Note that X is a variable, whereas socrates is an atom. The conclusion of the argument, “Socrates is mortal”, can be expressed through the query mortal(socrates). After having entered the above rules and facts, we can submit this query to Prolog, which will cause the following reaction:
+
+```
+Query: mortal(socrates).
+Yes
+```
+
+Prolog agrees with our own logical reasoning. Which is nice. But how did it come to its conclusion? Let’s follow the goal execution step by step.
+
+1. The query mortal(socrates) is made the initial goal.
+2. Scanning through the clauses of our program, Prolog tries to match mortal(socrates) with the first possible fact or head of rule. It finds mortal(X), the head of the first (and only) rule. When matching the two terms the instantiation X = socrates needs to be made.
+3. The variable instantiation is extended to the body of the rule, i.e. man(X) becomes man(socrates).
+4. The newly instantiated body becomes our new goal: man(socrates).
+5. Prolog executes the new goal by again trying to match it with a rule-head or a fact. Obviously, the goal man(socrates) matches the fact man(socrates), because they are identical. This means the current goal succeeds.
+6. This, again, means that also the initial goal succeeds.
+
+
+## A more involved example
+
+In the introduction it has been said that Prolog is a declarative (or descriptive) language. Programming in Prolog means describing the world. Using such programs means asking Prolog questions about the previously described world. The simplest way of describing the world is by stating facts, like this one:
+
+```
+small(dog).
+small(monkey).
+medium(horse).
+large(elephant).
+```
+
+This states, quite intuitively, that our world divides animals into 3 different sizes: small, medium, and large.
+
+However, these facts are just symbols to prolog, and have no human meanings associated with it.  To create some meaning, we can write the following rule:
+
+```
+bigger(X, Y) :- medium(X), small(Y).
+```
+
+The above rule suggest that a for X to be bigger than Y, X has to be a medium animal and Y has to be a small animal.
+
+Try to come up with the following:
+
+ 1. Using the above rule only, write a query that finds all animals bigger than a dog
+ 1. Come up with a set of rules that captures the relationships between all sizes of animals
+
+
+### Exercise 2
 
 Draw the family tree corresponding to the following Prolog program:
 
